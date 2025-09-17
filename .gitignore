@@ -1,0 +1,76 @@
+# Archivos de compilaci�n
+bin/
+obj/
+out/
+
+# Paquetes NuGet
+*.nupkg
+*.snupkg
+.nuget/
+packages/
+# Si usas paquetes locales
+*.nuspec
+
+# Archivos de usuario y configuraci�n de VS
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Archivos de configuraci�n de Rider
+.idea/
+*.sln.iml
+
+# Archivos de configuraci�n de Visual Studio Code
+.vscode/
+
+# Archivos de log y temporales
+*.log
+*.tmp
+*.temp
+
+# Archivos de configuraci�n de test
+TestResults/
+*.coverage
+*.coveragexml
+
+# Archivos generados por herramientas
+Generated_Code/
+
+# Archivos de configuraci�n de Docker
+docker-compose.override.yml
+
+# Archivos de configuraci�n de entorno
+.env
+
+# Archivos de configuraci�n de dependencias
+node_modules/
+
+# Ignorar archivos de configuraci�n de sistema operativo
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Ignorar archivos de configuraci�n de MacOS
+.DS_Store
+
+# Ignorar archivos de configuraci�n de Linux
+*.swp
+*.swo
+
+# Ignorar archivos de configuraci�n de JetBrains
+*.idea/
+
+# Ignorar archivos de configuraci�n de Resharper
+_ReSharper*/
+*.[Rr]e[Ss]harper
+
+# Ignorar archivos de configuraci�n de dotCover
+*.dotCover
+
+# Ignorar archivos de configuraci�n de StyleCop
+StyleCopReport.xml
+
+# Ignorar archivos de configuraci�n de SonarQube
+.sonar/

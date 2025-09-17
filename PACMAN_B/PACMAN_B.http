@@ -1,0 +1,6 @@
+@PACMAN_B_HostAddress = http://localhost:5248
+
+GET {{PACMAN_B_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
