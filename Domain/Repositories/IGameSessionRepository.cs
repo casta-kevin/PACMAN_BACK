@@ -25,5 +25,6 @@ namespace Domain.Repositories
         // Advanced filtering
         Task<IEnumerable<GameSession>> GetGameSessionsByScoreRangeAsync(int minScore, int maxScore);
         Task<IEnumerable<GameSession>> GetGameSessionsByDateRangeAsync(DateTime startDate, DateTime endDate);
+        Task<int>  DeleteAllAsync();
     }
 }

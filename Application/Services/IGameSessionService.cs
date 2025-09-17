@@ -26,6 +26,9 @@ namespace Application.Services
         Task<int> GetTotalGameSessionsCountAsync();
         Task<int> GetGameSessionsCountByPlayerIdAsync(int playerId);
 
+        // Bulk operations
+        Task<int> DeleteAllGameSessionsAsync();
+
         // Validation
         Task<bool> CanCreateGameSessionAsync(int playerId);
     }

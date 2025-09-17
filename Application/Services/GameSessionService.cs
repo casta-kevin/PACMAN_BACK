@@ -175,6 +175,27 @@ namespace Application.Services
             return await _unitOfWork.GameSessionRepository.GetGameSessionsCountByPlayerIdAsync(playerId);
         }
 
+        public async Task<int> DeleteAllGameSessionsAsync()
+        {
+            try
+            {
+                await _unitOfWork.BeginTransactionAsync();
+
+                // Usar el método eficiente del repositorio para eliminar todas las sesiones
+                var deletedCount = await _unitOfWork.GameSessionRepository.DeleteAllAsync();
+
+                await _unitOfWork.SaveChangesAsync();
+                await _unitOfWork.CommitTransactionAsync();
+
+                return deletedCount;
+            }
+            catch
+            {
+                await _unitOfWork.RollbackTransactionAsync();
+                throw;
+            }
+        }
+
         public async Task<bool> CanCreateGameSessionAsync(int playerId)
         {
             // Check if player exists

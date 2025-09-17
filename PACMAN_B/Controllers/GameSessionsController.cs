@@ -184,6 +184,48 @@ namespace PACMAN_B.Controllers
         }
 
         /// <summary>
+        /// Elimina todas las sesiones de juego (todos los scores)
+        /// </summary>
+        /// <returns>Resultado de la operación con el número de registros eliminados</returns>
+        [HttpDelete("all")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult<DeleteAllScoresResponse>> DeleteAllGameSessions()
+        {
+            try
+            {
+                var deletedCount = await _gameSessionService.DeleteAllGameSessionsAsync();
+                
+                _logger.LogInformation("Se eliminaron {DeletedCount} sesiones de juego", deletedCount);
+
+                var response = new DeleteAllScoresResponse
+                {
+                    Message = $"Se eliminaron exitosamente {deletedCount} sesiones de juego",
+                    DeletedCount = deletedCount,
+                    Success = true,
+                    Timestamp = DateTime.UtcNow
+                };
+
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error al eliminar todas las sesiones de juego");
+                
+                var errorResponse = new DeleteAllScoresResponse
+                {
+                    Message = "Error al eliminar las sesiones de juego",
+                    DeletedCount = 0,
+                    Success = false,
+                    Error = ex.Message,
+                    Timestamp = DateTime.UtcNow
+                };
+
+                return StatusCode(500, errorResponse);
+            }
+        }
+
+        /// <summary>
         /// Obtiene las mejores puntuaciones globales
         /// </summary>
         /// <param name="count">Número de puntuaciones a devolver</param>
@@ -359,5 +401,36 @@ namespace PACMAN_B.Controllers
         /// Mejor puntuación
         /// </summary>
         public int BestScore { get; set; }
+    }
+
+    /// <summary>
+    /// Modelo de respuesta para la eliminación de todos los scores
+    /// </summary>
+    public class DeleteAllScoresResponse
+    {
+        /// <summary>
+        /// Mensaje descriptivo de la operación
+        /// </summary>
+        public string Message { get; set; } = string.Empty;
+
+        /// <summary>
+        /// Número de registros eliminados
+        /// </summary>
+        public int DeletedCount { get; set; }
+
+        /// <summary>
+        /// Indica si la operación fue exitosa
+        /// </summary>
+        public bool Success { get; set; }
+
+        /// <summary>
+        /// Mensaje de error si ocurrió alguno
+        /// </summary>
+        public string? Error { get; set; }
+
+        /// <summary>
+        /// Timestamp de la operación
+        /// </summary>
+        public DateTime Timestamp { get; set; }
     }
 }

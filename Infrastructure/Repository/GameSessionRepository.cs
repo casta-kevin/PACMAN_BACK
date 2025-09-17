@@ -158,5 +158,16 @@ namespace Infrastructure.Repository
                 .OrderByDescending(gs => gs.PlayedAt)
                 .ToListAsync();
         }
+
+        public async Task<int> DeleteAllAsync()
+        {
+            // Obtener el conteo antes de eliminar
+            var totalCount = await _context.GameSessions.CountAsync();
+            
+            // Usar ExecuteDeleteAsync para una eliminación eficiente en lote (disponible en EF Core 7+)
+            var deletedCount = await _context.GameSessions.ExecuteDeleteAsync();
+            
+            return deletedCount;
+        }
     }
 }
