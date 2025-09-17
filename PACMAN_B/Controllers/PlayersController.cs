@@ -120,21 +120,18 @@ namespace PACMAN_B.Controllers
         /// <summary>
         /// Crea un nuevo jugador
         /// </summary>
-        /// <param name="request">Datos del nuevo jugador</param>
+        /// <param name="request">Datos del nuevo jugador (si está vacío se genera automáticamente)</param>
         /// <returns>Jugador creado</returns>
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<Player>> CreatePlayer([FromBody] CreatePlayerRequest request)
+        public async Task<ActionResult<Player>> CreatePlayer([FromBody] CreatePlayerRequest? request)
         {
             try
             {
-                if (string.IsNullOrWhiteSpace(request.Username))
-                {
-                    return BadRequest("El nombre de usuario es requerido");
-                }
-
-                var player = await _playerService.CreatePlayerAsync(request.Username);
+                // Ya no validamos que sea requerido, se puede enviar vacío para generar username aleatorio
+                var username = request?.Username ?? string.Empty;
+                var player = await _playerService.CreatePlayerAsync(username);
                 return CreatedAtAction(nameof(GetPlayer), new { id = player.PlayerId }, player);
             }
             catch (InvalidOperationException ex)
@@ -263,7 +260,7 @@ namespace PACMAN_B.Controllers
     public class CreatePlayerRequest
     {
         /// <summary>
-        /// Nombre de usuario del jugador
+        /// Nombre de usuario del jugador (opcional - si está vacío se genera automáticamente como "Player{5 números}")
         /// </summary>
         public string Username { get; set; } = string.Empty;
     }

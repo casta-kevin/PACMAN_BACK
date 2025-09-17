@@ -14,15 +14,15 @@ namespace Application.Services
 
         public async Task<Player> CreatePlayerAsync(string username)
         {
-            // Validate input
+            // Generate random username if empty
             if (string.IsNullOrWhiteSpace(username))
             {
-                throw new ArgumentException("Username cannot be empty or whitespace.", nameof(username));
+                username = await GenerateRandomUsernameAsync();
             }
 
             if (!await IsValidUsernameAsync(username))
             {
-                throw new InvalidOperationException($"Username '{username}' is invalid or already exists.");
+                throw new InvalidOperationException($"Username '{username}' already exists.");
             }
 
             try
@@ -141,14 +141,41 @@ namespace Application.Services
             if (string.IsNullOrWhiteSpace(username))
                 return false;
 
-            if (username.Length < 3 || username.Length > 50)
-                return false;
-
-            // Check if username already exists
+            // Removed length validations - only check if username already exists
             if (await PlayerExistsByUsernameAsync(username))
                 return false;
 
             return true;
+        }
+
+        /// <summary>
+        /// Genera un nombre de usuario aleatorio en formato "Player{5 números}"
+        /// </summary>
+        /// <returns>Nombre de usuario aleatorio único</returns>
+        private async Task<string> GenerateRandomUsernameAsync()
+        {
+            string username;
+            int attempts = 0;
+            const int maxAttempts = 100;
+
+            do
+            {
+                var random = new Random();
+                var randomNumbers = random.Next(10000, 99999); // Genera 5 dígitos
+                username = $"Player{randomNumbers}";
+                attempts++;
+
+                if (attempts >= maxAttempts)
+                {
+                    // Si después de muchos intentos no encuentra uno único, agrega timestamp
+                    var timestamp = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+                    username = $"Player{timestamp % 100000:D5}";
+                    break;
+                }
+            }
+            while (await PlayerExistsByUsernameAsync(username));
+
+            return username;
         }
     }
 }
